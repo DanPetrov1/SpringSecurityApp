@@ -3,16 +3,14 @@ package com.crowdfunding.controller;
 import com.crowdfunding.model.User;
 import com.crowdfunding.service.SecurityService;
 import com.crowdfunding.service.UserService;
+import com.crowdfunding.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.util.Map;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class RegistrationController {
@@ -21,9 +19,9 @@ public class RegistrationController {
     private UserService userService;
 
     @Autowired
-    private SecurityService securityService;
+    private UserValidator userValidator;
 
-    @GetMapping("/registration")
+    @RequestMapping(value = "/registration", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
@@ -31,21 +29,22 @@ public class RegistrationController {
         return "registration";
     }
 
-    @PostMapping("/registration")
-    @ResponseStatus(value = HttpStatus.OK)
-    public String addUser(User user, Map<String, Object> model) {
-        if (!userService.addUser(user)) {
-            model.put("message", "User exists!");
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+        userValidator.validate(userForm, bindingResult);
+
+        if (bindingResult.hasErrors()) {
             return "registration";
         }
 
-        return "redirect:login";
+        userService.addUser(userForm);
+
+        return "redirect:http://localhost:8087/login";
     }
 
-    @GetMapping("/activate/{code}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public String activate(Model model, @PathVariable String code) {
-        User user = userService.findByActivationCode(code);
+    @RequestMapping(value = "/activate/{code}", method = RequestMethod.GET)
+    public ModelAndView activate(Model model, @PathVariable String code)
+    {
 
         boolean isActivated = userService.activateUser(code);
 
@@ -55,8 +54,6 @@ public class RegistrationController {
 
         model.addAttribute("message", "User successfully activated");
 
-        //securityService.autoLogin(user.getUsername(), user.getConfirmPassword());
-
-        return "welcome";
+        return new ModelAndView("redirect:http://localhost:8087/login");
     }
 }

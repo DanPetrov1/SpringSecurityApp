@@ -11,7 +11,7 @@
 
     <import resource="appconfig-security.xml"/>
 
-    <context:component-scan base-package="com.crowdfunding.*"/>
+    <context:component-scan base-package="com.crowdfunding"/>
 
     <context:property-placeholder location="classpath:application.properties"/>
 
