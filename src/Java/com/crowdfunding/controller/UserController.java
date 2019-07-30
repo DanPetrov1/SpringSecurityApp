@@ -62,9 +62,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<User> getAllUsers(){
-        return new ArrayList<>(userRepository.findAll());
+    public String getList(Model model) {
+        List<User> users = new ArrayList<>(userRepository.findAll());
+        model.addAttribute("users", users);
+
+        return "users";
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
