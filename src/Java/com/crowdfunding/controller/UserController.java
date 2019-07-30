@@ -1,14 +1,17 @@
 package com.crowdfunding.controller;
 
+import com.crowdfunding.model.Password;
 import com.crowdfunding.model.User;
 import com.crowdfunding.repository.UserRepository;
+import com.crowdfunding.service.SecurityServiceImplementation;
 import com.crowdfunding.service.UserServiceImplementation;
+import com.crowdfunding.validator.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +20,16 @@ import java.util.List;
 public class UserController {
 
     @Autowired
+    PasswordValidator passwordValidator;
+
+    @Autowired
     UserRepository userRepository;
 
     @Autowired
     UserServiceImplementation userServiceImplementation;
+
+    @Autowired
+    SecurityServiceImplementation securityServiceImplementation;
 
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -64,33 +73,34 @@ public class UserController {
         userRepository.deleteById(id);
     }
 
-    @GetMapping(value = "/profile")
-    @ResponseStatus(value = HttpStatus.OK)
-    public ModelAndView getProfile(User user) {
-        ModelAndView result = new ModelAndView("profile");
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String getProfile(Model model, String error, String message) {
+        model.addAttribute("newPassword", new Password());
 
-        result.addObject("user", user);
+        if(message != null) {
+            model.addAttribute("message", "Password successfully updated.");
+        }
 
-        return result;
+        if(error != null) {
+            model.addAttribute("error", "Passwords don't match.");
+        }
+
+        return "profile";
     }
 
-    @PostMapping(value = "/profile")
-    @ResponseStatus(value = HttpStatus.OK)
-    public String postProfile(@RequestParam(name = "username") String username,
-                              @RequestParam(name = "password", required = false) String password) {
-        User user = userServiceImplementation.findByUsername(username);
+    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+    public String postProfile(@ModelAttribute("newPassword") Password newPassword, BindingResult bindingResult,
+                              Model model) {
+        passwordValidator.validate(newPassword, bindingResult);
 
-        if (!username.isEmpty()) {
-            user.setUsername(username);
+        if (bindingResult.hasErrors()) {
+            return "profile";
         }
 
-        if (password != null && !password.isEmpty()) {
-            user.setPassword(password);
-        }
+        userServiceImplementation.updatePassword(newPassword);
+        model.addAttribute("message", "Password successfully updated.");
 
-        userRepository.save(user);
-
-        return "redirect:/profile";
+        return "redirect:http://localhost:8087/profile";
     }
 }
 

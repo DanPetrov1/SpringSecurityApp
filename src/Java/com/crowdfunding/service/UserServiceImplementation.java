@@ -1,5 +1,6 @@
 package com.crowdfunding.service;
 
+import com.crowdfunding.model.Password;
 import com.crowdfunding.model.Role;
 import com.crowdfunding.model.User;
 import com.crowdfunding.repository.RoleRepository;
@@ -22,6 +23,9 @@ public class UserServiceImplementation implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private SecurityServiceImplementation securityServiceImplementation;
 
     @Autowired
     private MailSender mailSender;
@@ -78,6 +82,15 @@ public class UserServiceImplementation implements UserService {
     @Override
     public User findByActivationCode(String code) {
         return userRepository.findByActivationCode(code);
+    }
+
+    @Override
+    public void updatePassword(Password newPassword) {
+        User currentUser = userRepository.findByUsername(securityServiceImplementation.findLoggedInUsername());
+        if (currentUser!=null) {
+            currentUser.setPassword(bCryptPasswordEncoder.encode(newPassword.getPassword()));
+            userRepository.save(currentUser);
+        }
     }
 
     @Override

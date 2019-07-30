@@ -1,7 +1,6 @@
 package com.crowdfunding.controller;
 
 import com.crowdfunding.model.User;
-import com.crowdfunding.service.SecurityService;
 import com.crowdfunding.service.UserService;
 import com.crowdfunding.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
