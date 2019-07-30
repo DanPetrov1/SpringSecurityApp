@@ -1,5 +1,5 @@
 # SpringSecurityApp
-Spring (MVC, Security, JSP) + Hibernate + MySQL + Maven + Bootstrap
+Spring (MVC, Security, JSP) + Hibernate + MySQL + Maven + Bootstrap + Tomcat
 
 
 User authorithation and registration. After registration you should confirm your registration by email.
