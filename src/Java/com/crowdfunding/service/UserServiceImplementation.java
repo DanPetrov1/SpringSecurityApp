@@ -85,8 +85,9 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public void updatePassword(Password newPassword) {
-        User currentUser = userRepository.findByUsername(securityServiceImplementation.findLoggedInUsername());
+    public void updatePassword(Password newPassword) throws UsernameNotFoundException{
+        String currentUsername = securityServiceImplementation.findLoggedInUsername().getUsername();
+        User currentUser = userRepository.findByUsername(currentUsername);
         if (currentUser!=null) {
             currentUser.setPassword(bCryptPasswordEncoder.encode(newPassword.getPassword()));
             userRepository.save(currentUser);
