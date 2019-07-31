@@ -99,6 +99,62 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public boolean isCurrentUser(int id) {
+        String currentUsername = securityServiceImplementation.findLoggedInUsername().getUsername();
+        User currentUser = userRepository.findByUsername(currentUsername);
+        if (currentUser != null) {
+            return currentUser.getId() == id;
+        }
+        return false;
+    }
+
+    @Override
+    public void blockUser(User user) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.getOne(4L));
+        user.setRoles(roles);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void unblockUser(User user) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepository.getOne(2L));
+        user.setRoles(roles);
+        userRepository.save(user);
+    }
+
+    @Override
+    public boolean hasDifferences(User user, User editUser) {
+        if (editUser.getUsername() != null) {
+            return !user.getUsername().equals(editUser.getUsername());
+        }
+        if (editUser.getPassword() != null) {
+            return !user.getPassword().equals(editUser.getPassword());
+        }
+        if (editUser.getEmail() != null) {
+            return !user.getEmail().equals(editUser.getEmail());
+        }
+
+        return false;
+    }
+
+    @Override
+    public void update(User user, User editUser) {
+        if (editUser.getUsername() != null) {
+            user.setUsername(editUser.getUsername());
+        }
+        if (editUser.getPassword() != null) {
+            user.setPassword(editUser.getPassword());
+        }
+        if (editUser.getEmail() != null) {
+            user.setEmail(editUser.getEmail());
+        }
+
+        userRepository.save(user);
+    }
+
+    @Override
     public void updatePassword(Password newPassword) throws UsernameNotFoundException{
         String currentUsername = securityServiceImplementation.findLoggedInUsername().getUsername();
         User currentUser = userRepository.findByUsername(currentUsername);

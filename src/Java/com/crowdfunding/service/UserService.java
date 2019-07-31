@@ -17,4 +17,14 @@ public interface UserService {
     User findByActivationCode(String code);
 
     Role getCurrentUserRole();
+
+    boolean isCurrentUser(int id);
+
+    void blockUser(User user);
+
+    void unblockUser(User user);
+
+    boolean hasDifferences(User user, User editUser);
+
+    void update(User user, User editUser);
 }

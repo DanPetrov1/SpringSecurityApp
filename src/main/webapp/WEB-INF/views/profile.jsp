@@ -48,7 +48,7 @@
                     </div>
                 </spring:bind>
                 <input type="submit" value="Update"/>
-                <a href="${contextPath}/welcome">Back</a>
+                <a href="${contextPath}/feed">Back</a>
             </div>
         </div>
 

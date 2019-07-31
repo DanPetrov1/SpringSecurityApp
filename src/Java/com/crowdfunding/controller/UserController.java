@@ -54,16 +54,6 @@ public class UserController {
         return "/login";
     }
 
-    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
-    public String welcome(Model model) {
-        return "welcome";
-    }
-
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String admin(Model model) {
-        return "admin";
-    }
-
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String getList(Model model) {
         List<User> users = new ArrayList<>(userRepository.findAll());
@@ -79,9 +69,37 @@ public class UserController {
 
         Role role = userServiceImplementation.getCurrentUserRole();
         if (role.getId() == 3) {
-            model.addAttribute("role", role);
+            model.addAttribute("adminRole", new Role());
+            model.addAttribute("editUser", new User());
         }
+        if (userServiceImplementation.isCurrentUser(id)) {
+            return "redirect:http://localhost:8087/profile";
+        }
+        if (role.getId() == 1 || role.getId() == 4) {
+            model.addAttribute("noRole");
+        }
+
         return "/users/id";
+    }
+
+    @RequestMapping(value = "/users/id={id}", method = RequestMethod.POST)
+    public String actionsWithUser(@PathVariable int id, @ModelAttribute("editUser") User editUser,
+                   @ModelAttribute("user") User user, @ModelAttribute("adminRole") Role role, Model model) {
+        if (role.getId() == 4) {
+            userServiceImplementation.blockUser(user);
+            model.addAttribute("warning", "The user is blocked");
+            return "redirect:http://localhost:8087/users";
+        }
+
+        if (userServiceImplementation.hasDifferences(user, editUser)) {
+            userServiceImplementation.update(user, editUser);
+            model.addAttribute("message", "The user is updated");
+            return "redirect:http://localhost:8087/users";
+        }
+
+
+
+        return "redirect:http://localhost:8087/users";
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)

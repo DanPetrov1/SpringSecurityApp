@@ -27,9 +27,9 @@
             <c:forEach items="${users}" var="user">
                 <li>
                     <div class="form-group-lg">
-                        <a href="/users/${user.id}">${user.id}</a>
-                        ${user.username}
-                        ${user.email}
+                        <a href="${contextPath}/users/id=${user.id}">
+                            <p>${user.username} - ${user.email}</p>
+                        </a>
                     </div>
                 </li>
             </c:forEach>
