@@ -1,7 +1,9 @@
 package com.crowdfunding.controller;
 
 import com.crowdfunding.model.Password;
+import com.crowdfunding.model.Role;
 import com.crowdfunding.model.User;
+import com.crowdfunding.repository.RoleRepository;
 import com.crowdfunding.repository.UserRepository;
 import com.crowdfunding.service.SecurityServiceImplementation;
 import com.crowdfunding.service.UserServiceImplementation;
@@ -15,9 +17,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class UserController {
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Autowired
     PasswordValidator passwordValidator;
@@ -67,11 +73,16 @@ public class UserController {
         return "users";
     }
 
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-    public String deleteItem(@PathVariable int id){
-        userRepository.deleteById(id);
+    @RequestMapping(value = "/users/id={id}", method = RequestMethod.GET)
+    public String deleteItem(@PathVariable int id, Model model){
+        User user = userRepository.findById(id);
+        model.addAttribute("user", user);
 
-        return "/users/{id}";
+        Set<Role> role = userServiceImplementation.getCurrentUserRole();
+        if (role.equals("3L")) {
+            model.addAttribute("role", role);
+        }
+        return "/users/id";
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)

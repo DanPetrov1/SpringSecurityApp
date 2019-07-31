@@ -85,6 +85,16 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public Set<Role> getCurrentUserRole() {
+        String currentUsername = securityServiceImplementation.findLoggedInUsername().getUsername();
+        User currentUser = userRepository.findByUsername(currentUsername);
+        if (currentUser == null) {
+            return null;
+        }
+        return currentUser.getRoles();
+    }
+
+    @Override
     public void updatePassword(Password newPassword) throws UsernameNotFoundException{
         String currentUsername = securityServiceImplementation.findLoggedInUsername().getUsername();
         User currentUser = userRepository.findByUsername(currentUsername);

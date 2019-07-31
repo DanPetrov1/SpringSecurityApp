@@ -1,7 +1,10 @@
 package com.crowdfunding.service;
 
 import com.crowdfunding.model.Password;
+import com.crowdfunding.model.Role;
 import com.crowdfunding.model.User;
+
+import java.util.Set;
 
 public interface UserService {
 
@@ -14,4 +17,6 @@ public interface UserService {
     boolean activateUser(String code);
 
     User findByActivationCode(String code);
+
+    Set<Role> getCurrentUserRole();
 }
