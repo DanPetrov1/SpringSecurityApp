@@ -5,6 +5,7 @@ import com.crowdfunding.model.Role;
 import com.crowdfunding.model.User;
 import com.crowdfunding.repository.RoleRepository;
 import com.crowdfunding.repository.UserRepository;
+import com.crowdfunding.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +18,9 @@ import java.util.UUID;
 
 @Service
 public class UserServiceImplementation implements UserService {
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -85,13 +89,13 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public Set<Role> getCurrentUserRole() {
+    public Role getCurrentUserRole() {
         String currentUsername = securityServiceImplementation.findLoggedInUsername().getUsername();
-        User currentUser = userRepository.findByUsername(currentUsername);
-        if (currentUser == null) {
-            return null;
+        if (userRepository.findByUsername(currentUsername) != null) {
+            return roleRepository.findById(userRoleRepository.findByUserId(userRepository.
+                    findByUsername(currentUsername).getId()).getRoleId());
         }
-        return currentUser.getRoles();
+        return null;
     }
 
     @Override

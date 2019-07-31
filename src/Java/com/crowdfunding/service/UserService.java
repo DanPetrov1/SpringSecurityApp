@@ -4,8 +4,6 @@ import com.crowdfunding.model.Password;
 import com.crowdfunding.model.Role;
 import com.crowdfunding.model.User;
 
-import java.util.Set;
-
 public interface UserService {
 
     void updatePassword(Password newPassword);
@@ -18,5 +16,5 @@ public interface UserService {
 
     User findByActivationCode(String code);
 
-    Set<Role> getCurrentUserRole();
+    Role getCurrentUserRole();
 }

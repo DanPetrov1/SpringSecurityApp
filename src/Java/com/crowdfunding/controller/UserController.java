@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class UserController {
@@ -74,19 +73,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/id={id}", method = RequestMethod.GET)
-    public String deleteItem(@PathVariable int id, Model model){
+    public String getUserProfile(@PathVariable int id, Model model){
         User user = userRepository.findById(id);
         model.addAttribute("user", user);
 
-        Set<Role> role = userServiceImplementation.getCurrentUserRole();
-        if (role.equals("3L")) {
+        Role role = userServiceImplementation.getCurrentUserRole();
+        if (role.getId() == 3) {
             model.addAttribute("role", role);
         }
         return "/users/id";
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String getProfile(Model model, String error, String message) {
+    public String getMyProfile(Model model, String error, String message) {
         model.addAttribute("newPassword", new Password());
 
         if(message != null) {
