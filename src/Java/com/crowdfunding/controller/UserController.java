@@ -50,13 +50,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
-    @ResponseStatus(value = HttpStatus.OK)
     public String welcome(Model model) {
         return "welcome";
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    @ResponseStatus(value = HttpStatus.OK)
     public String admin(Model model) {
         return "admin";
     }
@@ -69,10 +67,11 @@ public class UserController {
         return "users";
     }
 
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(value = HttpStatus.OK)
-    public void deleteItem(@PathVariable int id){
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    public String deleteItem(@PathVariable int id){
         userRepository.deleteById(id);
+
+        return "/users/{id}";
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)

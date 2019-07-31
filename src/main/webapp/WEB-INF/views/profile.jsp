@@ -14,7 +14,7 @@
         <title>My profile</title>
 
         <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-        <link href="${contextPath}/resources/css/registration.css" rel="stylesheet">
+        <link href="${contextPath}/resources/css/update.css" rel="stylesheet">
 
 
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -22,29 +22,34 @@
     </head>
     <body>
 <div class="container">
-    <form:form method="POST" modelAttribute="newPassword" class="form-signin">
-    <h1>${pageContext.request.userPrincipal.name}'s profile</h1>
+    <form:form method="POST" modelAttribute="newPassword" class="decor">
+        <div class="form-left-decoration"></div>
+        <div class="form-right-decoration"></div>
+        <div class="circle"></div>
+        <div class="form-inner">
+            <h2>${pageContext.request.userPrincipal.name}'s profile</h2>
 
-        <h4 class="form-heading">Write new password to update and press the button</h4>
+            <h3>Write new password to update and press the button</h3>
 
-        <div class="form-group ${error != null ? 'has-error' : ''}">
-            <span>${message}</span>
-            <spring:bind path="password">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="password" path="password" class="form-control" placeholder="New password"></form:input>
-                    <form:errors path="password"></form:errors>
-                </div>
-            </spring:bind>
+            <div class="${error != null ? 'has-error' : ''}">
+                <span>${message}</span>
+                <spring:bind path="password">
+                    <div class="${status.error ? 'has-error' : ''}">
+                        <form:input type="password" path="password" placeholder="New password"></form:input>
+                        <form:errors path="password"></form:errors>
+                    </div>
+                </spring:bind>
             
-            <spring:bind path="confirmPassword">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="password" path="confirmPassword" class="form-control"
+                <spring:bind path="confirmPassword">
+                    <div class="${status.error ? 'has-error' : ''}">
+                        <form:input type="password" path="confirmPassword"
                                 placeholder="Confirm your password"></form:input>
-                    <form:errors path="confirmPassword"></form:errors>
-                </div>
-            </spring:bind>
-            <button class="btn btn-warning btn-primary btn-block" type="submit">Update</button>
-            <a href="/welcome" class="btn" class="btn-default">Back</a>
+                        <form:errors path="confirmPassword"></form:errors>
+                    </div>
+                </spring:bind>
+                <input type="submit" value="Update"/>
+                <a href="${contextPath}/welcome">Back</a>
+            </div>
         </div>
 
     </form:form>

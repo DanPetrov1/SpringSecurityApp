@@ -14,7 +14,7 @@
     <title>Users</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${contextPath}/resources/css/registration.css" rel="stylesheet">
+    <link href="${contextPath}/resources/css/main.css" rel="stylesheet">
 
 
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -23,14 +23,17 @@
 <body>
 <div class="container">
     <div class="form-group">
-    <c:forEach items="${users}" var="user">
-            <div class="form-group-lg">
-                <div class="icon-bar"><c:out value="${user.id}"/></div>
-                <c:out value="${user.username}"/>
-                <c:out value="${user.email}"/>
-            </div>
-            <br/>
-        </c:forEach>
+        <ol class="rounded">
+            <c:forEach items="${users}" var="user">
+                <li>
+                    <div class="form-group-lg">
+                        <a href="/users/${user.id}">${user.id}</a>
+                        ${user.username}
+                        ${user.email}
+                    </div>
+                </li>
+            </c:forEach>
+        </ol>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
