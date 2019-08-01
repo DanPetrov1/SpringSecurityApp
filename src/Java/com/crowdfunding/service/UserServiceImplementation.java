@@ -89,10 +89,19 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public Role getRoleByUsername(String username) {
+        if (userRepository.findByUsername(username) != null) {
+            return roleRepository.findById(userRoleRepository.findByUserId(userRepository.
+                    findByUsername(username).getId()).getRoleId());
+        }
+        return null;
+    }
+
+    @Override
     public Role getCurrentUserRole() {
         String currentUsername = securityServiceImplementation.findLoggedInUsername().getUsername();
         if (userRepository.findByUsername(currentUsername) != null) {
-            return roleRepository.findById(userRoleRepository.findByUserId(userRepository.
+            return roleRepository.findById((long) userRoleRepository.findByUserId(userRepository.
                     findByUsername(currentUsername).getId()).getRoleId());
         }
         return null;
@@ -119,38 +128,13 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void unblockUser(User user) {
         Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.getOne(2L));
+        if (user.getActivationCode().equals("Activated")) {
+            roles.add(roleRepository.getOne(2L));
+        }
+        else {
+            roles.add(roleRepository.getOne(1L));
+        }
         user.setRoles(roles);
-        userRepository.save(user);
-    }
-
-    @Override
-    public boolean hasDifferences(User user, User editUser) {
-        if (editUser.getUsername() != null) {
-            return !user.getUsername().equals(editUser.getUsername());
-        }
-        if (editUser.getPassword() != null) {
-            return !user.getPassword().equals(editUser.getPassword());
-        }
-        if (editUser.getEmail() != null) {
-            return !user.getEmail().equals(editUser.getEmail());
-        }
-
-        return false;
-    }
-
-    @Override
-    public void update(User user, User editUser) {
-        if (editUser.getUsername() != null) {
-            user.setUsername(editUser.getUsername());
-        }
-        if (editUser.getPassword() != null) {
-            user.setPassword(editUser.getPassword());
-        }
-        if (editUser.getEmail() != null) {
-            user.setEmail(editUser.getEmail());
-        }
-
         userRepository.save(user);
     }
 
@@ -162,6 +146,12 @@ public class UserServiceImplementation implements UserService {
             currentUser.setPassword(bCryptPasswordEncoder.encode(newPassword.getPassword()));
             userRepository.save(currentUser);
         }
+    }
+
+    @Override
+    public void updatePassword(User user, Password newPassword) {
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword.getPassword()));
+        userRepository.save(user);
     }
 
     @Override

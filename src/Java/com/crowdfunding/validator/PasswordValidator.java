@@ -26,6 +26,11 @@ public class PasswordValidator implements Validator {
             return;
         }
 
+        if (password.getConfirmPassword().length() < 1) {
+            errors.rejectValue("confirmPassword", "Empty.userForm");
+            return;
+        }
+
         if (!password.getConfirmPassword().equals(password.getPassword())) {
             errors.rejectValue("confirmPassword", "Different.userForm.password");
         }

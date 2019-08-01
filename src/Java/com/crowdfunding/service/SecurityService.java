@@ -7,6 +7,4 @@ import org.springframework.stereotype.Service;
 public interface SecurityService {
 
     User findLoggedInUsername();
-
-    void autoLogin(String username, String password);
 }

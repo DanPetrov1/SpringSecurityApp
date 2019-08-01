@@ -33,19 +33,4 @@ public class SecurityServiceImplementation implements SecurityService {
 
         return null;
     }
-
-    @Override
-    public void autoLogin(String username, String password) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
-
-        authenticationManager.authenticate(authenticationToken);
-
-        if (authenticationToken.isAuthenticated()) {
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-            logger.debug(String.format("Successfully %s auto logged in", username));
-        }
-    }
 }

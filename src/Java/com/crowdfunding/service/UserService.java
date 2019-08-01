@@ -8,6 +8,8 @@ public interface UserService {
 
     void updatePassword(Password newPassword);
 
+    void updatePassword(User user, Password newPassword);
+
     User findByUsername(String username);
 
     boolean addUser(User user);
@@ -16,6 +18,8 @@ public interface UserService {
 
     User findByActivationCode(String code);
 
+    Role getRoleByUsername(String username);
+
     Role getCurrentUserRole();
 
     boolean isCurrentUser(int id);
@@ -23,8 +27,4 @@ public interface UserService {
     void blockUser(User user);
 
     void unblockUser(User user);
-
-    boolean hasDifferences(User user, User editUser);
-
-    void update(User user, User editUser);
 }

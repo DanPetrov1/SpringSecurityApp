@@ -1,3 +1,4 @@
+<%@ page import="com.crowdfunding.model.Role" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -39,51 +40,43 @@
             </div>
             <div class="col-xs-12 divider text-center">
                 <c:if  test="${adminRole != null}">
-                    <form:form method="POST" modelAttribute="editUser" class="form-signin">
+                    <span>${warning}</span>
+                    <form:form method="POST" modelAttribute="editPassword" class="form-signin">
                         <h2 class="form-signin-heading">Edit user</h2>
-                        <spring:bind path="username">
-                            <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <form:input type="text" path="username" class="form-control" placeholder="Edit username"
-                                            autofocus="true"></form:input>
-                                <form:errors path="username"></form:errors>
-                            </div>
-                        </spring:bind>
-
-                        <spring:bind path="email">
-                            <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <form:input type="text" path="email" class="form-control" placeholder="Edit email"
-                                            autofocus="true"></form:input>
-                                <form:errors path="email"></form:errors>
-                            </div>
-                        </spring:bind>
-
+                        <span>${message}</span>
                         <spring:bind path="password">
-                            <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <form:input type="password" path="password" class="form-control" placeholder="New password"></form:input>
+                            <div class="${status.error ? 'has-error' : ''}">
+                                <form:input type="password" path="password" placeholder="New password"></form:input>
                                 <form:errors path="password"></form:errors>
                             </div>
                         </spring:bind>
 
                         <spring:bind path="confirmPassword">
-                            <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <form:input type="password" path="confirmPassword" class="form-control"
-                                            placeholder="Confirm new password"></form:input>
+                            <div class="${status.error ? 'has-error' : ''}">
+                                <form:input type="password" path="confirmPassword"
+                                            placeholder="Confirm your password"></form:input>
                                 <form:errors path="confirmPassword"></form:errors>
                             </div>
                         </spring:bind>
-
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
-                    </form:form>
                     <div class="col-xs-12 col-sm-4 emphasis">
-                        <button class="btn btn-success btn-block"><span class="fa fa-plus-circle" onclick="${adminRole.id = 4}"></span> Block</button>
+                        <button class="btn btn-success btn-block" type="submit"><span class="fa fa-plus-circle">
+                            Submit</span></button>
                     </div>
+                    </form:form>
+                    <form:form method="post" cssClass="form-signin">
+                    <div class="col-xs-12 col-sm-4 emphasis">
+                        <button class="btn btn-success btn-block" type="submit"><span class="fa fa-plus-circle">
+                            <c:if test="${adminRole.id == 2}">Block</c:if><c:if test="${adminRole.id == 4}"> Unblock</c:if>
+                        </span></button>
+                    </div>
+                    </form:form>
                 </c:if>
             </div>
             </c:if>
             <c:if test="${noRole != null}">
                 <p><strong>Warning!</strong> Access closed!</p>
-                <button><a href="${contextPath}/feed">Go back</a></button>
             </c:if>
+            <button><a href="${contextPath}/feed">Go back</a></button>
         </div>
     </div>
 </div>

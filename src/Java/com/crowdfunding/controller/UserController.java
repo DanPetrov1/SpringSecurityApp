@@ -63,43 +63,66 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/id={id}", method = RequestMethod.GET)
-    public String getUserProfile(@PathVariable int id, Model model){
+    public String getUserProfile(@PathVariable int id, String warning, String message, Model model){
         User user = userRepository.findById(id);
         model.addAttribute("user", user);
 
+        if(warning != null) {
+            model.addAttribute("warning", warning);
+        }
+
+        if(message != null) {
+            model.addAttribute("message", message);
+        }
+
+        Role userRole = userServiceImplementation.getRoleByUsername(user.getUsername());
+
         Role role = userServiceImplementation.getCurrentUserRole();
-        if (role.getId() == 3) {
-            model.addAttribute("adminRole", new Role());
-            model.addAttribute("editUser", new User());
+        if (role.getId() == 3L) {
+            model.addAttribute("adminRole", userRole);
+            model.addAttribute("editPassword", new Password());
         }
         if (userServiceImplementation.isCurrentUser(id)) {
             return "redirect:http://localhost:8087/profile";
         }
-        if (role.getId() == 1 || role.getId() == 4) {
-            model.addAttribute("noRole");
+        if (role.getId() == 1L || role.getId() == 4L) {
+            model.addAttribute("noRole", role);
         }
 
         return "/users/id";
     }
 
     @RequestMapping(value = "/users/id={id}", method = RequestMethod.POST)
-    public String actionsWithUser(@PathVariable int id, @ModelAttribute("editUser") User editUser,
-                   @ModelAttribute("user") User user, @ModelAttribute("adminRole") Role role, Model model) {
-        if (role.getId() == 4) {
+    public String actionsWithUser(@PathVariable int id, @ModelAttribute("editPassword") Password editPassword,
+                                  @ModelAttribute("adminRole") Role role, Model model, BindingResult bindingResult) {
+        User user = userRepository.findById(id);
+
+        if (editPassword.getPassword() != null && editPassword.getPassword().length() > 1) {
+            passwordValidator.validate(editPassword, bindingResult);
+            if (bindingResult.hasErrors()) {
+                return "/users/id";
+            }
+
+            userServiceImplementation.updatePassword(user, editPassword);
+            model.addAttribute("message", "The password is updated");
+            return "redirect:http://localhost:8087/users/id=" + id ;
+        }
+
+        role = userServiceImplementation.getRoleByUsername(user.getUsername());
+
+        if (role.getId() == 2 || role.getId() == 1) {
             userServiceImplementation.blockUser(user);
             model.addAttribute("warning", "The user is blocked");
-            return "redirect:http://localhost:8087/users";
+            return "redirect:http://localhost:8087/users/id=" + id ;
         }
 
-        if (userServiceImplementation.hasDifferences(user, editUser)) {
-            userServiceImplementation.update(user, editUser);
-            model.addAttribute("message", "The user is updated");
-            return "redirect:http://localhost:8087/users";
+        if (role.getId() == 4) {
+            userServiceImplementation.unblockUser(user);
+            model.addAttribute("warning", "The user is unblocked");
+            return "redirect:http://localhost:8087/users/id=" + id ;
         }
 
-
-
-        return "redirect:http://localhost:8087/users";
+        return "redirect:http://localhost:8087/users/id=" + id ;
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
