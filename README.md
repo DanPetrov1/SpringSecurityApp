@@ -6,4 +6,4 @@ User authorithation and registration. After registration you should confirm your
 In app you can update user's password, add new users, see the list of users and look their profiles.
 If you have the admin role you can block another users or update information about them.
 
-TODO: update password correctly, change the block button, add unblock command.
+TODO: fix bugs.
