@@ -80,4 +80,7 @@ span.tags
     z-index: 10;
 }
 
+.has-error {
+    color: red;
+}
 

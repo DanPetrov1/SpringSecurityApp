@@ -41,32 +41,28 @@
             <div class="col-xs-12 divider text-center">
                 <c:if  test="${adminRole != null}">
                     <span>${warning}</span>
-                    <form:form method="POST" modelAttribute="editPassword" class="form-signin">
+                    <form:form method="post" modelAttribute="editPassword" class="form-signin">
                         <h2 class="form-signin-heading">Edit user</h2>
                         <span>${message}</span>
                         <spring:bind path="password">
-                            <div class="${status.error ? 'has-error' : ''}">
-                                <form:input type="password" path="password" placeholder="New password"></form:input>
-                                <form:errors path="password"></form:errors>
-                            </div>
+                            <form:input type="password" path="password" placeholder="New password"></form:input>
                         </spring:bind>
 
                         <spring:bind path="confirmPassword">
-                            <div class="${status.error ? 'has-error' : ''}">
-                                <form:input type="password" path="confirmPassword"
+                            <form:input type="password" path="confirmPassword"
                                             placeholder="Confirm your password"></form:input>
-                                <form:errors path="confirmPassword"></form:errors>
-                            </div>
                         </spring:bind>
+                        <div class="${error != null ? 'has-error' : ''}">
+                            <span>${error}</span>
+                        </div>
                     <div class="col-xs-12 col-sm-4 emphasis">
-                        <button class="btn btn-success btn-block" type="submit"><span class="fa fa-plus-circle">
-                            Submit</span></button>
+                        <input class="btn btn-success btn-block" type="submit" value="Submit">
                     </div>
                     </form:form>
-                    <form:form method="post" cssClass="form-signin">
+                    <form:form method="post" class="form-signin">
                     <div class="col-xs-12 col-sm-4 emphasis">
                         <button class="btn btn-success btn-block" type="submit"><span class="fa fa-plus-circle">
-                            <c:if test="${adminRole.id == 2}">Block</c:if><c:if test="${adminRole.id == 4}"> Unblock</c:if>
+                            <c:if test="${adminRole.id == 2 || adminRole.id == 1}">Block</c:if><c:if test="${adminRole.id == 4}"> Unblock</c:if>
                         </span></button>
                     </div>
                     </form:form>

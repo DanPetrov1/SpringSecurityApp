@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/id={id}", method = RequestMethod.GET)
-    public String getUserProfile(@PathVariable int id, String warning, String message, Model model){
+    public String getUserProfile(@PathVariable int id, String warning, String message, String error, Model model){
         User user = userRepository.findById(id);
         model.addAttribute("user", user);
 
@@ -73,6 +73,10 @@ public class UserController {
 
         if(message != null) {
             model.addAttribute("message", message);
+        }
+
+        if(error != null) {
+            model.addAttribute("error", error);
         }
 
         Role userRole = userServiceImplementation.getRoleByUsername(user.getUsername());
@@ -93,14 +97,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/id={id}", method = RequestMethod.POST)
-    public String actionsWithUser(@PathVariable int id, @ModelAttribute("editPassword") Password editPassword,
-                                  @ModelAttribute("adminRole") Role role, Model model, BindingResult bindingResult) {
+    public String actionsWithUser(@ModelAttribute("editPassword") Password editPassword, Model model,
+                                  @PathVariable int id) {
         User user = userRepository.findById(id);
 
-        if (editPassword.getPassword() != null && editPassword.getPassword().length() > 1) {
-            passwordValidator.validate(editPassword, bindingResult);
-            if (bindingResult.hasErrors()) {
-                return "/users/id";
+        if (editPassword.getPassword() != null) {
+            if (passwordValidator.hasErrors(editPassword, model)) {
+                return "redirect:http://localhost:8087/users/id=" + id ;
             }
 
             userServiceImplementation.updatePassword(user, editPassword);
@@ -108,7 +111,7 @@ public class UserController {
             return "redirect:http://localhost:8087/users/id=" + id ;
         }
 
-        role = userServiceImplementation.getRoleByUsername(user.getUsername());
+        Role role = userServiceImplementation.getRoleByUsername(user.getUsername());
 
         if (role.getId() == 2 || role.getId() == 1) {
             userServiceImplementation.blockUser(user);
