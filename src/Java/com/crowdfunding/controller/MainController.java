@@ -27,10 +27,6 @@ public class MainController {
 
     @RequestMapping(value = "/feed", method = RequestMethod.GET)
     public String welcome(Model model, String error, String message) {
-        model.addAttribute("posts", postRepository.findAll());
-        model.addAttribute("newPost", new Post());
-        model.addAttribute("topicName", new Topic());
-
         if (error != null) {
             model.addAttribute("error", error);
         }
@@ -38,6 +34,10 @@ public class MainController {
         if(message != null) {
             model.addAttribute("message", message);
         }
+
+        model.addAttribute("posts", postRepository.findAll());
+        model.addAttribute("newPost", new Post());
+        model.addAttribute("topicName", new Topic());
 
         return "feed";
     }
@@ -48,18 +48,19 @@ public class MainController {
         if (post != null) {
             if (topic.getTopicName().length() < 1) {
                 model.addAttribute("error", "Write the name of the topic.");
-                return "feed";
+                return "redirect:http://localhost:8087/feed";
             }
 
             postValidator.validate(post, bindingResult);
             if (bindingResult.hasErrors()) {
-                return "feed";
+                return "/feed";
             }
 
             postServiceImplementation.createPost(post, topic.getTopicName());
         }
 
-        return "redirect:localhost:8087/feed";
+        model.addAttribute("message", "The post has been created successfully.");
+        return "redirect:http://localhost:8087/feed";
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)

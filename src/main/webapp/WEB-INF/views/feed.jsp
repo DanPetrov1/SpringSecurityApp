@@ -25,11 +25,13 @@
     <a href="${contextPath}/profile" class="button5">Profile</a>
     <a href="${contextPath}/users" class="button5">Users</a>
     <a onclick="document.forms['logoutForm'].submit()" class="button5">Logout</a>
+    <form id="logoutForm" method="post" action="${contextPath}/logout">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+    </form>
+
+    <h2>Welcome ${pageContext.request.userPrincipal.name}</h2>
 
         <form:form modelAttribute="newPost" method="post" id="newPost" class="decor">
-
-            <h2>Welcome ${pageContext.request.userPrincipal.name}</h2>
-            <span>${message}</span>
 
             <div class="form-left-decoration"></div>
                 <div class="form-right-decoration"></div>
@@ -51,28 +53,29 @@
                             <form:errors path="message"></form:errors>
                         </div>
                     </spring:bind>
+                    <span>${message}</span>
                     <button class="button30" type="submit">+</button>
                 </div>
-        </form:form>
 
-        <div class="form-group">
-            <ol class="rounded">
-                <c:forEach items="${posts}" var="post">
-                    <li>
-                        <div class="form-group-lg">
-                            <a href="#">
-                                <p>Date of creation - ${post.creationDate}</p>
-                                <label>
-                                    ${post.message}
-                                </label>
-                            </a>
-                        </div>
-                    </li>
-                </c:forEach>
-            </ol>
-        </div>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+            <div class="form-group">
+                <ol class="rounded">
+                    <c:forEach items="${posts}" var="post">
+                        <li>
+                            <div class="form-group-lg">
+                                <a href="#">
+                                    <p>Date of creation - ${post.creationDate}</p>
+                                    <label>
+                                        ${post.message}
+                                    </label>
+                                </a>
+                            </div>
+                        </li>
+                    </c:forEach>
+                </ol>
+            </div>
+        </form:form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>
 </html>
