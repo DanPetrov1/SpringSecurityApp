@@ -1,0 +1,130 @@
+button.button30 {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    width: 1.3em;
+    height: 1.3em;
+    line-height: 1.3em;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 1px 1px rgba(255,255,255,.3);
+    font-size: 300%;
+    font-weight: 900;
+    color: #000;
+    border-radius: 100%;
+    background: rgb(144,142,105) linear-gradient(rgb(185,181,151), rgb(144,142,105));
+    box-shadow:
+            inset 0 -2px 1px rgba(0,0,0,.5),
+            inset 0 2px 1px rgba(255,255,255,.9),
+            0 4px 4px rgba(0,0,0,.9);
+}
+button.button30:after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 12%;
+    left: 12%;
+    right: 12%;
+    bottom: 12%;
+    border-radius: 100%;
+    background: rgb(242,203,20) linear-gradient(rgb(242,203,20), rgb(255,182,7));
+    box-shadow:
+            inset 0 2px 1px rgba(0,0,0,.5),
+            inset 0 -2px 1px rgba(255,255,255,.3);
+}
+* {box-sizing: border-box;}
+body {background: #f69a73;}
+.decor {
+    position: relative;
+    max-width: 400px;
+    margin: 50px auto 0;
+    background: white;
+    border-radius: 30px;
+}
+.form-left-decoration,
+.form-right-decoration {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 20px;
+    background: #f69a73;
+    border-radius: 20px;
+}
+.form-left-decoration {
+    bottom: 60px;
+    left: -30px;
+}
+.form-right-decoration {
+    top: 60px;
+    right: -30px;
+}
+.form-left-decoration:before,
+.form-left-decoration:after,
+.form-right-decoration:before,
+.form-right-decoration:after {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 20px;
+    border-radius: 30px;
+    background: white;
+}
+.form-left-decoration:before {top: -20px;}
+.form-left-decoration:after {
+    top: 20px;
+    left: 10px;
+}
+.form-right-decoration:before {
+    top: -20px;
+    right: 0;
+}
+.form-right-decoration:after {
+    top: 20px;
+    right: 10px;
+}
+.circle {
+    position: absolute;
+    bottom: 80px;
+    left: -55px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+}
+.form-inner {padding: 50px;}
+.form-inner input,
+.form-inner textarea {
+    display: block;
+    width: 100%;
+    padding: 0 20px;
+    margin-bottom: 10px;
+    background: #E9EFF6;
+    line-height: 40px;
+    border-width: 0;
+    border-radius: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+.form-inner input[type="submit"] {
+    margin-top: 30px;
+    background: #f69a73;
+    border-bottom: 4px solid #d87d56;
+    color: white;
+    font-size: 14px;
+}
+.form-inner textarea {resize: none;}
+.form-inner h3 {
+    margin-top: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    color: #707981;
+}
+
+h2 {
+    margin-top: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    color: #7079;
+}
