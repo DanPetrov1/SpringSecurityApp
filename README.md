@@ -13,4 +13,4 @@ In app user with admin's role can update user's password or block another user.
 Moreover, you can add new users, see the list of users and look their profiles.
 Users also can create different posts with their own or common topics. If there're no such topics, it's being created a new topic with such topic name.
 
-TODO: add actions with posts and topics, fix bugs.
+TODO: fix bugs, edit post, add feachures.
