@@ -32,7 +32,7 @@ public class MainController {
         }
 
         if(message != null) {
-            model.addAttribute("message", message);
+            model.addAttribute("successMessage", message);
         }
 
         model.addAttribute("posts", postRepository.findAll());
@@ -45,7 +45,7 @@ public class MainController {
     @RequestMapping(value = "/feed", method = RequestMethod.POST)
     public String addPost(@ModelAttribute("newPost") Post post , @ModelAttribute("topicName") Topic topic,
                           BindingResult bindingResult, Model model) {
-        if (post != null) {
+        if (post.getMessage() != null) {
             if (topic.getTopicName().length() < 1) {
                 model.addAttribute("error", "Write the name of the topic.");
                 return "redirect:http://localhost:8087/feed";
@@ -57,9 +57,11 @@ public class MainController {
             }
 
             postServiceImplementation.createPost(post, topic.getTopicName());
+            model.addAttribute("message", "The post has been created successfully.");
+            return "redirect:http://localhost:8087/feed";
         }
 
-        model.addAttribute("message", "The post has been created successfully.");
+        model.addAttribute("error", "Write the message.");
         return "redirect:http://localhost:8087/feed";
     }
 

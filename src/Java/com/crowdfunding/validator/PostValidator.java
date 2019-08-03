@@ -17,7 +17,7 @@ public class PostValidator implements Validator {
         Post post = (Post) o;
 
         if (post.getMessage().length() < 1) {
-            errors.rejectValue("message", "Empty.postForm");
+            errors.rejectValue("topicName", "Empty.postForm");
         }
     }
 }

@@ -38,9 +38,10 @@
                 <div class="circle"></div>
                 <div class="form-inner">
                     <h3>New post</h3>
-                    <form:form modelAttribute="topicName">
+                    <form:form modelAttribute="topicName" method="post">
                         <spring:bind path="topicName">
                             <form:input type="text" placeholder="Topic name" path="topicName"></form:input>
+                            <form:errors path="topicName"></form:errors>
                         </spring:bind>
                     </form:form>
                     <div class="${error != null ? 'has-error' : ''}">
@@ -53,7 +54,7 @@
                             <form:errors path="message"></form:errors>
                         </div>
                     </spring:bind>
-                    <span>${message}</span>
+                    <span>${successMessage}</span>
                     <button class="button30" type="submit">+</button>
                 </div>
 
@@ -62,8 +63,8 @@
                     <c:forEach items="${posts}" var="post">
                         <li>
                             <div class="form-group-lg">
-                                <a href="#">
-                                    <p>Date of creation - ${post.creationDate}</p>
+                                <a href="${contextPath}/topics/id=${post.idTopic}">
+                                    <p>${post.idAuthor}/${post.idTopic} - ${post.creationDate}</p>
                                     <label>
                                         ${post.message}
                                     </label>
