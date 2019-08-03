@@ -3,8 +3,10 @@ package com.crowdfunding.controller;
 import com.crowdfunding.model.Post;
 import com.crowdfunding.model.Role;
 import com.crowdfunding.model.Topic;
+import com.crowdfunding.model.User;
 import com.crowdfunding.repository.PostRepository;
 import com.crowdfunding.repository.TopicRepository;
+import com.crowdfunding.repository.UserRepository;
 import com.crowdfunding.service.PostServiceImplementation;
 import com.crowdfunding.service.UserServiceImplementation;
 import com.crowdfunding.validator.PostValidator;
@@ -38,6 +40,9 @@ public class MainController {
 
     @Autowired
     private TopicRepository topicRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @RequestMapping(value = "/feed", method = RequestMethod.GET)
     public String welcome(Model model, String error, String message) {
@@ -134,7 +139,22 @@ public class MainController {
     }
 
     @RequestMapping(value = "/posts/edit={id}", method = RequestMethod.GET)
-    public String editProfile() {
-        return "";
+    public String editProfile(@PathVariable("id") int id, Model model) {
+        if(userServiceImplementation.getCurrentUser() == null) {
+            model.addAttribute("message", "You need to log in.");
+            return "redirect:http://localhost:8087/login";
+        }
+
+        Post post = postRepository.findById(id);
+        User user = userRepository.findById(post.getIdAuthor());
+        model.addAttribute("post", post);
+        model.addAttribute("author", user);
+
+        if (userServiceImplementation.getCurrentUserRole().getId() == 3L ||
+                userServiceImplementation.isCurrentUser(user.getId())) {
+            model.addAttribute("editPost", true);
+        }
+
+        return "editPost";
     }
 }
