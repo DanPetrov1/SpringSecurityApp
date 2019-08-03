@@ -27,4 +27,8 @@ public interface UserService {
     void blockUser(User user);
 
     void unblockUser(User user);
+
+    int getCurrentUserId();
+
+    User getCurrentUser();
 }

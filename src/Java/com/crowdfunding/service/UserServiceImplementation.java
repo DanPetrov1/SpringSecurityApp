@@ -99,18 +99,15 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public Role getCurrentUserRole() {
-        String currentUsername = securityServiceImplementation.findLoggedInUsername().getUsername();
-        if (userRepository.findByUsername(currentUsername) != null) {
-            return roleRepository.findById((long) userRoleRepository.findByUserId(userRepository.
-                    findByUsername(currentUsername).getId()).getRoleId());
+        if (getCurrentUser() != null) {
+            return roleRepository.findById((long) userRoleRepository.findByUserId(getCurrentUser().getId()).getRoleId());
         }
         return null;
     }
 
     @Override
     public boolean isCurrentUser(int id) {
-        String currentUsername = securityServiceImplementation.findLoggedInUsername().getUsername();
-        User currentUser = userRepository.findByUsername(currentUsername);
+        User currentUser = getCurrentUser();
         if (currentUser != null) {
             return currentUser.getId() == id;
         }
@@ -139,9 +136,27 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public int getCurrentUserId() {
+        User currentUser = getCurrentUser();
+        if(currentUser!=null) {
+            return currentUser.getId();
+        }
+        return 0;
+    }
+
+    @Override
+    public User getCurrentUser() {
+        org.springframework.security.core.userdetails.User user = securityServiceImplementation.findLoggedInUsername();
+        if (user == null) {
+            return null;
+        } else {
+            return userRepository.findByUsername(user.getUsername());
+        }
+    }
+
+    @Override
     public void updatePassword(Password newPassword) throws UsernameNotFoundException{
-        String currentUsername = securityServiceImplementation.findLoggedInUsername().getUsername();
-        User currentUser = userRepository.findByUsername(currentUsername);
+        User currentUser = getCurrentUser();
         if (currentUser!=null) {
             currentUser.setPassword(bCryptPasswordEncoder.encode(newPassword.getPassword()));
             userRepository.save(currentUser);

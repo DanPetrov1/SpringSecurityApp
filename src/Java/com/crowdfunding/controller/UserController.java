@@ -48,7 +48,7 @@ public class UserController {
         }
 
         if(message != null) {
-            model.addAttribute("message", "User successfully activated.");
+            model.addAttribute("message", message);
         }
 
         return "/login";
@@ -56,6 +56,11 @@ public class UserController {
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String getList(Model model) {
+        if(userServiceImplementation.getCurrentUser() == null) {
+            model.addAttribute("message", "You need to log in.");
+            return "redirect:http://localhost:8087/login";
+        }
+
         List<User> users = new ArrayList<>(userRepository.findAll());
         model.addAttribute("users", users);
 
@@ -64,6 +69,11 @@ public class UserController {
 
     @RequestMapping(value = "/users/id={id}", method = RequestMethod.GET)
     public String getUserProfile(@PathVariable int id, String warning, String message, String error, Model model){
+        if(userServiceImplementation.getCurrentUser() == null) {
+            model.addAttribute("message", "You need to log in.");
+            return "redirect:http://localhost:8087/login";
+        }
+
         User user = userRepository.findById(id);
         model.addAttribute("user", user);
 
@@ -130,6 +140,11 @@ public class UserController {
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String getMyProfile(Model model, String error, String message) {
+        if(userServiceImplementation.getCurrentUser() == null) {
+            model.addAttribute("message", "You need to log in.");
+            return "redirect:http://localhost:8087/login";
+        }
+
         model.addAttribute("newPassword", new Password());
 
         if(message != null) {

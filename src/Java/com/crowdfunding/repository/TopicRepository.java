@@ -7,4 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface TopicRepository extends JpaRepository<Topic, Long> {
     Topic findByTopicName(String topicName);
+
+    Topic findById(int id);
 }
