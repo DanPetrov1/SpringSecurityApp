@@ -3,6 +3,7 @@ package com.crowdfunding.controller;
 import com.crowdfunding.model.Password;
 import com.crowdfunding.model.Role;
 import com.crowdfunding.model.User;
+import com.crowdfunding.repository.PostRepository;
 import com.crowdfunding.repository.RoleRepository;
 import com.crowdfunding.repository.UserRepository;
 import com.crowdfunding.service.SecurityServiceImplementation;
@@ -29,6 +30,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PostRepository postRepository;
 
     @Autowired
     UserServiceImplementation userServiceImplementation;
@@ -92,16 +96,17 @@ public class UserController {
         Role userRole = userServiceImplementation.getRoleByUsername(user.getUsername());
 
         Role role = userServiceImplementation.getCurrentUserRole();
-        if (role.getId() == 3L) {
-            model.addAttribute("adminRole", userRole);
+        if (role.getId() == 3L && !userServiceImplementation.isCurrentUser(id)) {
             model.addAttribute("editPassword", new Password());
         }
-        if (userServiceImplementation.isCurrentUser(id)) {
-            return "redirect:http://localhost:8087/profile";
+        if (userServiceImplementation.isCurrentUser(id) || role.getId() == 3L) {
+            model.addAttribute("editRole", userRole);
         }
         if (role.getId() == 1L || role.getId() == 4L) {
             model.addAttribute("noRole", role);
         }
+
+        model.addAttribute("posts", postRepository.findAllByIdAuthor(id));
 
         return "/users/id";
     }

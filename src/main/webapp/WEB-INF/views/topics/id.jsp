@@ -27,14 +27,16 @@
             <c:forEach items="${posts}" var="post">
                 <li>
                     <div class="form-group-lg">
-                        <a href="${contextPath}/users/id=${post.idAuthor}">
+                        <a class="count" href="${contextPath}/users/id=${post.idAuthor}">
                             <p>${post.creationDate}</p>
                             <label>
                                 ${post.message}
                             </label>
                         </a>
-                        <c:if test="${adminRole != null}"><button href="${contextPath}/posts/delete=${post.id}" type="button">Delete</button></c:if>
                     </div>
+                    <form action="/posts/delete=${post.id}">
+                        <c:if test="${adminRole != null}"><button type="submit">Delete</button></c:if>
+                    </form>
                 </li>
             </c:forEach>
         </ol>

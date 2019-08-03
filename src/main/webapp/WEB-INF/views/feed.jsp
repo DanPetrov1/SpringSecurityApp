@@ -24,8 +24,8 @@
 <div class="container">
     <a href="${contextPath}/profile" class="button5">Profile</a>
     <a href="${contextPath}/users" class="button5">Users</a>
-    <a onclick="document.forms['logoutForm'].submit()" class="button5">Logout</a>
     <a href="${contextPath}/topics" class="button5">Topics</a>
+    <a onclick="document.forms['logoutForm'].submit()" class="button5">Logout</a>
     <form id="logoutForm" method="post" action="${contextPath}/logout">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     </form>
@@ -55,7 +55,7 @@
                             <form:errors path="message"></form:errors>
                         </div>
                     </spring:bind>
-                    <span>${successMessage}</span>
+                    <span>${success}</span>
                     <button class="button30" type="submit">+</button>
                 </div>
 

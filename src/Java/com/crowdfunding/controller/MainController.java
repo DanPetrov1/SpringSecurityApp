@@ -51,7 +51,7 @@ public class MainController {
         }
 
         if(message != null) {
-            model.addAttribute("successMessage", message);
+            model.addAttribute("success", message);
         }
 
         model.addAttribute("posts", postRepository.findAll());
@@ -76,7 +76,7 @@ public class MainController {
             }
 
             postServiceImplementation.createPost(post, topic.getTopicName());
-            model.addAttribute("message", "The post has been created successfully.");
+            model.addAttribute("success", "The post has been created successfully.");
             return "redirect:http://localhost:8087/feed";
         }
 
@@ -131,5 +131,10 @@ public class MainController {
         model.addAttribute("topics", topics);
 
         return "topics";
+    }
+
+    @RequestMapping(value = "/posts/edit={id}", method = RequestMethod.GET)
+    public String editProfile() {
+        return "";
     }
 }

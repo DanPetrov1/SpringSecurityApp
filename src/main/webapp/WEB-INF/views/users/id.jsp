@@ -39,8 +39,9 @@
                 </div>
             </div>
             <div class="col-xs-12 divider text-center">
-                <c:if  test="${adminRole != null}">
+                <c:if  test="${editRole != null}">
                     <span>${warning}</span>
+                    <c:if test="${editPassword != null}">
                     <form:form method="post" modelAttribute="editPassword" class="form-signin">
                         <h2 class="form-signin-heading">Edit user</h2>
                         <span>${message}</span>
@@ -66,8 +67,31 @@
                         </span></button>
                     </div>
                     </form:form>
+                    </c:if>
                 </c:if>
             </div>
+                <div class="form-group">
+                    <ol class="rounded">
+                        <c:forEach items="${posts}" var="post">
+                            <li>
+                                <div class="form-group-lg">
+                                    <a href="${contextPath}/topics/id=${post.idTopic}">
+                                        <p>${post.idAuthor}/${post.idTopic} - ${post.creationDate}</p>
+                                    </a>
+                                    <label>
+                                            ${post.message}
+                                    </label>
+                                    <form action="/posts/edit=${post.id}">
+                                        <c:if test="${editRole != null}"><button type="submit">Edit</button></c:if>
+                                    </form>
+                                    <form action="/posts/delete=${post.id}">
+                                        <c:if test="${editRole != null}"><button type="submit">Delete</button></c:if>
+                                    </form>
+                                </div>
+                            </li>
+                        </c:forEach>
+                    </ol>
+                </div>
             </c:if>
             <c:if test="${noRole != null}">
                 <p><strong>Warning!</strong> Access closed!</p>
