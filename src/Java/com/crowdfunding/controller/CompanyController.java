@@ -4,9 +4,12 @@ import com.crowdfunding.model.Company;
 import com.crowdfunding.repository.CompanyRepository;
 import com.crowdfunding.service.CompanyServiceImplementation;
 import com.crowdfunding.service.UserServiceImplementation;
+import com.crowdfunding.validator.CompanyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,16 +18,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class CompanyController {
 
     @Autowired
-    CompanyRepository companyRepository;
-
-    @Autowired
     UserServiceImplementation userServiceImplementation;
 
     @Autowired
     CompanyServiceImplementation companyServiceImplementation;
 
-    @RequestMapping(name = "/companies", method = RequestMethod.GET)
-    public String companies(Model model, String error, String message) {
+    @Autowired
+    CompanyRepository companyRepository;
+
+    @Autowired
+    CompanyValidator companyValidator;
+
+    @RequestMapping(value = "/companies", method = RequestMethod.GET)
+    public String companies(Model model, String message, String error) {
         if(userServiceImplementation.getCurrentUser() == null) {
             model.addAttribute("message", "You need to log in.");
             return "redirect:http://localhost:8087/login";
@@ -46,8 +52,23 @@ public class CompanyController {
         return "companies";
     }
 
-    @RequestMapping(name = "/company={id}/share={cash}", method = RequestMethod.GET)
-    public String share(@PathVariable("id") int id, @PathVariable("cash") int cash, Model model) {
+    @RequestMapping(value = "/companies", method = RequestMethod.POST)
+    public String addCompany(@ModelAttribute("newCompany") Company company, BindingResult bindingResult, Model model) {
+        if (company != null) {
+            companyValidator.validate(company, bindingResult);
+            if(bindingResult.hasErrors()) {
+                return "companies";
+            }
+
+            companyServiceImplementation.addCompany(company);
+            model.addAttribute("message", "Company has been founded successfully.");
+        }
+
+        return "redirect:http://localhost:8087/companies";
+    }
+
+    @RequestMapping(value = "/company={id}/share", method = RequestMethod.GET)
+    public String shareCash(@PathVariable("id") int id, @ModelAttribute("cash") int cash, Model model) {
         if(userServiceImplementation.getCurrentUser() == null) {
             model.addAttribute("message", "You need to log in.");
             return "redirect:http://localhost:8087/login";

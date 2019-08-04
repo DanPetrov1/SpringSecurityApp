@@ -33,14 +33,13 @@
                 <form:input type="text" placeholder="Company name" path="name"></form:input>
                 <form:errors path="name"></form:errors>
             </spring:bind>
-            <spring:bind path="message">
+            <spring:bind path="description">
                 <div class="${status.error ? 'has-error' : ''}">
                     <form:textarea path="description" type="text"
                                    placeholder="Write the descrition..."></form:textarea>
                     <form:errors path="description"></form:errors>
                 </div>
             </spring:bind>
-            <span>${success}</span>
             <button class="button30" type="submit">+</button>
         </div>
     </form:form>
@@ -59,7 +58,7 @@
                         <p>${company.cash}</p>
                     </div>
                 </li>
-                <form action="company=${company.id}/share=${cash}">
+                <form action="company=${company.id}/share" method="post">
                     <form:input path="cash"></form:input>
                     <button type="submit">Share</button>
                 </form>
