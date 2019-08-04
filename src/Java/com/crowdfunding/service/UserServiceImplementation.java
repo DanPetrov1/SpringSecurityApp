@@ -48,6 +48,7 @@ public class UserServiceImplementation implements UserService {
         user.setRoles(roles);
         user.setActivationCode(UUID.randomUUID().toString());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setCash(0L);
 
         userRepository.save(user);
 

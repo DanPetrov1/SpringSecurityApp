@@ -27,6 +27,9 @@ public class User {
     @Column(name = "activationCode")
     private String activationCode;
 
+    @Column(name = "cash")
+    private Long cash;
+
     @ManyToMany
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -86,5 +89,13 @@ public class User {
 
     public void setActivationCode(String activationCode) {
         this.activationCode = activationCode;
+    }
+
+    public Long getCash() {
+        return cash;
+    }
+
+    public void setCash(Long cash) {
+        this.cash = cash;
     }
 }
