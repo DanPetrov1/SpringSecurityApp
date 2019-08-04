@@ -140,10 +140,17 @@ public class MainController {
     }
 
     @RequestMapping(value = "/posts/edit={id}", method = RequestMethod.GET)
-    public String editProfile(@PathVariable("id") int id, Model model) {
+    public String editPost(@PathVariable("id") int id, Model model, String error, String message) {
         if(userServiceImplementation.getCurrentUser() == null) {
             model.addAttribute("message", "You need to log in.");
             return "redirect:http://localhost:8087/login";
+        }
+
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
+        if (message != null) {
+            model.addAttribute("message", message);
         }
 
         Post post = postRepository.findById(id);
@@ -157,5 +164,20 @@ public class MainController {
         }
 
         return "editPost";
+    }
+
+    @RequestMapping(value = "/posts/edit={id}", method = RequestMethod.POST)
+    public String editPost(@PathVariable("id") int id, @ModelAttribute("editPost") Post editPost, Model model) {
+        if (editPost != null) {
+            if (editPost.getMessage().length() < 1) {
+                model.addAttribute("error", "Complete the empty field.");
+                return "redirect:http://localhost:8087/posts/edit=" + id;
+            }
+
+
+            postServiceImplementation.updateMessage(postRepository.findById(id), editPost);
+            model.addAttribute("message", "Post has been updated.");
+        }
+        return "redirect:http://localhost:8087/posts/edit=" + id;
     }
 }

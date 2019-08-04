@@ -52,4 +52,14 @@ public class PostServiceImplementation implements PostService {
 
         postRepository.save(post);
     }
+
+    @Override
+    public void updateMessage(Post post, Post editPost) {
+        post.setMessage(editPost.getMessage());
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        post.setCreationDate(dateFormat.format(date));
+
+        postRepository.save(post);
+    }
 }

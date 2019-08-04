@@ -30,10 +30,11 @@
             <spring:bind path="message">
                 <div class="${status.error ? 'has-error' : ''}">
                     <label>
-                        <textarea path="message" type="text"
-                            placeholder="Write the message...">${post.message}</textarea>
+                        <p>${post.message}</p>
+                        <form:textarea path="message" type="text"
+                            placeholder="Write the message..."></form:textarea>
                     </label>
-                    <form:errors path="message"></form:errors>
+                    <span>${message}${error}</span>
                 </div>
             </spring:bind>
             <button type="submit">Submit</button>
