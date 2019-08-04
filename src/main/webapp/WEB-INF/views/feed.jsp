@@ -22,7 +22,8 @@
 <body>
 
 <div class="container">
-    <a href="${contextPath}/profile" class="button5">Profile</a>
+    <a href="${contextPath}/users/id=${user.id}" class="button5">Profile</a>
+    <a href="${contextPath}/profile" class="button5">Edit Profile</a>
     <a href="${contextPath}/users" class="button5">Users</a>
     <a href="${contextPath}/topics" class="button5">Topics</a>
     <a onclick="document.forms['logoutForm'].submit()" class="button5">Logout</a>
@@ -65,7 +66,9 @@
                         <li>
                             <div class="form-group-lg">
                                 <a href="${contextPath}/topics/id=${post.idTopic}">
-                                    <p>${post.idAuthor}/${post.idTopic} - ${post.creationDate}</p>
+                                    <p><c:if test="${post.idAuthor == user.id}">${user.username}</c:if>
+                                        <c:if test="${post.idAuthor != user.id}">${post.idAuthor}</c:if>
+                                        /${post.idTopic} - ${post.creationDate}</p>
                                     <label>
                                         ${post.message}
                                     </label>

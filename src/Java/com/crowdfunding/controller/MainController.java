@@ -62,6 +62,7 @@ public class MainController {
         model.addAttribute("posts", postRepository.findAll());
         model.addAttribute("newPost", new Post());
         model.addAttribute("topicName", new Topic());
+        model.addAttribute("user", userServiceImplementation.getCurrentUser());
 
         return "feed";
     }
@@ -152,7 +153,7 @@ public class MainController {
 
         if (userServiceImplementation.getCurrentUserRole().getId() == 3L ||
                 userServiceImplementation.isCurrentUser(user.getId())) {
-            model.addAttribute("editPost", true);
+            model.addAttribute("editPost", new Post());
         }
 
         return "editPost";

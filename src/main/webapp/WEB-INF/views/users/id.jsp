@@ -63,41 +63,44 @@
                     <form:form method="post" class="form-signin">
                     <div class="col-xs-12 col-sm-4 emphasis">
                         <button class="btn btn-success btn-block" type="submit"><span class="fa fa-plus-circle">
-                            <c:if test="${adminRole.id == 2 || adminRole.id == 1}">Block</c:if><c:if test="${adminRole.id == 4}"> Unblock</c:if>
+                            <c:if test="${editRole.id == 2 || editRole.id == 1}">Block</c:if><c:if test="${editRole.id == 4}"> Unblock</c:if>
                         </span></button>
                     </div>
                     </form:form>
                     </c:if>
                 </c:if>
             </div>
-                <div class="form-group">
-                    <ol class="rounded">
-                        <c:forEach items="${posts}" var="post">
-                            <li>
-                                <div class="form-group-lg">
-                                    <a href="${contextPath}/topics/id=${post.idTopic}">
-                                        <p>${post.idAuthor}/${post.idTopic} - ${post.creationDate}</p>
-                                    </a>
-                                    <label>
-                                            ${post.message}
-                                    </label>
-                                    <form action="/posts/edit=${post.id}">
-                                        <c:if test="${editRole != null}"><button type="submit">Edit</button></c:if>
-                                    </form>
-                                    <form action="/posts/delete=${post.id}">
-                                        <c:if test="${editRole != null}"><button type="submit">Delete</button></c:if>
-                                    </form>
-                                </div>
-                            </li>
-                        </c:forEach>
-                    </ol>
-                </div>
+
             </c:if>
             <c:if test="${noRole != null}">
                 <p><strong>Warning!</strong> Access closed!</p>
             </c:if>
             <button><a href="${contextPath}/feed">Go back</a></button>
         </div>
+        <c:if test="${noRole == null}">
+            <div class="form-group">
+                <ol class="rounded">
+                    <c:forEach items="${posts}" var="post">
+                        <li>
+                            <div class="form-group-lg">
+                                <a href="${contextPath}/topics/id=${post.idTopic}">
+                                    <p>${user.username}/${post.idTopic} - ${post.creationDate}</p>
+                                </a>
+                                <label>
+                                        ${post.message}
+                                </label>
+                                <form action="/posts/edit=${post.id}">
+                                    <c:if test="${editRole != null}"><button type="submit">Edit</button></c:if>
+                                </form>
+                                <form action="/posts/delete=${post.id}">
+                                    <c:if test="${editRole != null}"><button type="submit">Delete</button></c:if>
+                                </form>
+                            </div>
+                        </li>
+                    </c:forEach>
+                </ol>
+            </div>
+        </c:if>
     </div>
 </div>
 
