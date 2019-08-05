@@ -11,7 +11,7 @@
     <meta name="viewpoint" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Users</title>
+    <title>Companies</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/main.css" rel="stylesheet">
@@ -22,7 +22,7 @@
 </head>
 <body>
 <div class="container">
-    <span>${error}</span>
+    <span>${error}${message}</span>
     <form:form modelAttribute="newCompany" method="post" class="decor">
         <div class="form-left-decoration"></div>
         <div class="form-right-decoration"></div>
@@ -30,8 +30,10 @@
         <div class="form-inner">
             <h3>New company</h3>
             <spring:bind path="name">
-                <form:input type="text" placeholder="Company name" path="name"></form:input>
-                <form:errors path="name"></form:errors>
+                <div class="${status.error ? 'has-error' : ''}">
+                    <form:input type="text" placeholder="Company name" path="name"></form:input>
+                    <form:errors path="name"></form:errors>
+                </div>
             </spring:bind>
             <spring:bind path="description">
                 <div class="${status.error ? 'has-error' : ''}">
@@ -49,7 +51,7 @@
             <c:forEach items="${companies}" var="company">
                 <li>
                     <div class="form-group-lg">
-                        <a href="${contextPath}/users/id=${company.idFounder}">
+                        <a href="${contextPath}/company=${company.id}">
                             <p>${company.name} - ${company.dateFoundation}</p>
                         </a>
                         <label>
@@ -58,10 +60,6 @@
                         <p>${company.cash}</p>
                     </div>
                 </li>
-                <form action="company=${company.id}/share" method="post">
-                    <form:input path="cash"></form:input>
-                    <button type="submit">Share</button>
-                </form>
             </c:forEach>
         </ol>
     </div>

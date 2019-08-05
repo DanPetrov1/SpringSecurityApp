@@ -25,7 +25,7 @@ public class CompanyServiceImplementation implements CompanyService {
     @Override
     public void share(Company company, int cash) {
         User user = userServiceImplementation.getCurrentUser();
-        company.setCash((long)cash);
+        company.setCash((long)cash + company.getCash());
         user.setCash(user.getCash() - (long)cash);
         companyRepository.save(company);
         userRepository.save(user);

@@ -1,6 +1,7 @@
 package com.crowdfunding.controller;
 
 import com.crowdfunding.model.Company;
+import com.crowdfunding.model.Role;
 import com.crowdfunding.repository.CompanyRepository;
 import com.crowdfunding.service.CompanyServiceImplementation;
 import com.crowdfunding.service.UserServiceImplementation;
@@ -44,8 +45,6 @@ public class CompanyController {
             model.addAttribute("error", error);
         }
 
-        int cash = 0;
-        model.addAttribute("cash", cash);
         model.addAttribute("companies", companyRepository.findAll());
         model.addAttribute("newCompany", new Company());
 
@@ -88,5 +87,35 @@ public class CompanyController {
         model.addAttribute("message", "Sharing completed successfully");
 
         return "redirect:http://localhost:8087/companies";
+    }
+
+    @RequestMapping(value = "/company={id}", method = RequestMethod.GET)
+    public String editCompany(@PathVariable int id, String message, String error, Model model) {
+        if(userServiceImplementation.getCurrentUser() == null) {
+            model.addAttribute("message", "You need to log in.");
+            return "redirect:http://localhost:8087/login";
+        }
+
+        Company company = companyRepository.findById(id);
+        model.addAttribute("company", company);
+        model.addAttribute("user", userServiceImplementation.getCurrentUser());
+
+        if(message != null) {
+            model.addAttribute("message", message);
+        }
+
+        if(error != null) {
+            model.addAttribute("error", error);
+        }
+
+        Role role = userServiceImplementation.getCurrentUserRole();
+        if (userServiceImplementation.isCurrentUser(id) || role.getId() == 3L) {
+            model.addAttribute("editCompany", new Company());
+        }
+        if (role.getId() == 1L || role.getId() == 4L) {
+            model.addAttribute("noRole", role);
+        }
+
+        return "company";
     }
 }
