@@ -40,4 +40,14 @@ public class CompanyServiceImplementation implements CompanyService {
         company.setIdFounder(userServiceImplementation.getCurrentUser().getId());
         companyRepository.save(company);
     }
+
+    @Override
+    public void update(Company company, Company editCompany) {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        company.setDateFoundation(dateFormat.format(date));
+        company.setName(editCompany.getName());
+        company.setDescription(editCompany.getDescription());
+        companyRepository.save(company);
+    }
 }

@@ -156,6 +156,23 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public void replenishCash(int cash) {
+        User user = getCurrentUser();
+
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            String message = String.format(
+                    "Hello, %s!\n" +
+                            "You successfully replenished your cash by the %d$.",
+                    user.getUsername(), cash
+            );
+
+            mailSender.send(user.getEmail(), "Replenishment", message);
+        }
+        user.setCash(user.getCash() + (long)cash);
+        userRepository.save(user);
+    }
+
+    @Override
     public void updatePassword(Password newPassword) throws UsernameNotFoundException{
         User currentUser = getCurrentUser();
         if (currentUser!=null) {

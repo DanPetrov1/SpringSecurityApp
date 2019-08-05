@@ -118,4 +118,20 @@ public class CompanyController {
 
         return "company";
     }
+
+    @RequestMapping(value = "/company={id}", method = RequestMethod.POST)
+    public String editCompany(@PathVariable int id, @ModelAttribute("editCompany") Company editCompany,
+                              BindingResult bindingResult, Model model) {
+        if (editCompany != null) {
+            companyValidator.validate(editCompany, bindingResult);
+            if (bindingResult.hasErrors()) {
+                return "/company";
+            }
+
+            companyServiceImplementation.update(companyRepository.findById(id), editCompany);
+            model.addAttribute("message", "Company info was updated successfully.");
+        }
+
+        return "redirect:http://localhost:8087/company=" + id;
+    }
 }

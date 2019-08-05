@@ -6,4 +6,6 @@ public interface CompanyService {
     void share(Company byId, int cash);
 
     void addCompany(Company company);
+
+    void update(Company company, Company editCompany);
 }

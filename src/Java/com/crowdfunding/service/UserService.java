@@ -31,4 +31,6 @@ public interface UserService {
     int getCurrentUserId();
 
     User getCurrentUser();
+
+    void replenishCash(int cash);
 }

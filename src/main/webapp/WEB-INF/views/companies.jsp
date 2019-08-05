@@ -63,6 +63,9 @@
             </c:forEach>
         </ol>
     </div>
+    <form action="${contextPath}/feed">
+        <button type="submit">Go back</button>
+    </form>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

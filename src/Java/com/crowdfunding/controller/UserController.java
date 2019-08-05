@@ -177,5 +177,35 @@ public class UserController {
 
         return "redirect:http://localhost:8087/profile";
     }
+
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public String replenish(Model model, String message, String error) {
+        if(userServiceImplementation.getCurrentUser() == null) {
+            model.addAttribute("message", "You need to log in.");
+            return "redirect:http://localhost:8087/login";
+        }
+
+        if(message != null) {
+            model.addAttribute("message", "Cash successfully replenished.");
+        }
+
+        if(error != null) {
+            model.addAttribute("error", "You can't replenish your cash.");
+        }
+
+        return "add";
+    }
+
+    @RequestMapping(value = "/replenish", method = RequestMethod.GET)
+    public String replenishCash(@ModelAttribute("cash") int cash, Model model) {
+        if (cash < 1) {
+            model.addAttribute("error", "Illegal number.");
+        } else {
+            userServiceImplementation.replenishCash(cash);
+            model.addAttribute("message", "Success.");
+        }
+
+        return "redirect:http://localhost:8087/add";
+    }
 }
 
