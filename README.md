@@ -6,11 +6,13 @@ Web application with model:
 2. Role (There're 4 roles: unactivated, user, blocked, admin)
 3. Post
 4. Topic
+5. Company
 
 This app consists of user authorithation and registration. 
 After registration user gets role 'unactivated'. He should confirm the registration by message with activation code, which he'll get by email.
 In app user with admin's role can update user's password or block another user.
 Moreover, you can add new users, see the list of users and look their profiles.
 Users also can create different posts with their own or common topics. If there're no such topics, it's being created a new topic with such topic name.
+You can create/edit companies, share them money and etc.
 
-TODO: fix bugs, edit post, add feachures.
+TODO: fix bugs, add feachures.
